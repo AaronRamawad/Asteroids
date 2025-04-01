@@ -11,11 +11,11 @@ def main():
     print(f"Screen Height: {SCREEN_HEIGHT}")
 
     pygame.init()
-
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    
     clock = pygame.time.Clock()
     dt = 0
+    pygame.font.init()
+    my_font = pygame.font.SysFont("Comic Sans MS", 30)
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -31,6 +31,7 @@ def main():
     AsteroidField.containers = (updatable)
     asteroid_field = AsteroidField()
 
+    player_score = 0
 
     while True:
         for event in pygame.event.get():
@@ -38,6 +39,8 @@ def main():
                 return
             
         pygame.Surface.fill(screen, (125, 0, 255))
+        player_score_surface = my_font.render(f"Score: {str(player_score)}", False, "white")
+        screen.blit(player_score_surface, (0,0))
         for object in drawable:
             object.draw(screen)
         updatable.update(dt)
@@ -55,7 +58,8 @@ def main():
 
         pygame.display.flip()
 
-        time_passed = clock.tick(144)
+        player_score = pygame.time.get_ticks() // 1000
+        time_passed = clock.tick(FPS)
         dt = time_passed / 1000
 
 
