@@ -1,14 +1,22 @@
 import pygame
 from circleshape import CircleShape
 from constants import *
+from weapon import *
 import math
 
 class Player(CircleShape):
+
+    weapons = [
+        Submachine(),
+        SniperRifle(),
+        Rifle(),
+    ]
 
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.timer = 0
+        self.weapon = 0  #default is submachine
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -39,7 +47,9 @@ class Player(CircleShape):
         if keys[pygame.K_s]:
             self.move(-dt)
         if keys[pygame.K_SPACE]:
-            self.shoot()
+            self.shoot(self.weapons[self.weapon])
+        if keys[pygame.K_f]:
+            self.switch_weapon()
 
 
         if not (keys[pygame.K_w] or keys[pygame.K_s]):
@@ -56,20 +66,26 @@ class Player(CircleShape):
         else:
             self.velocity = forward * (intial_velocity)
         
+    def switch_weapon(self):
+        if self.weapon + 1 == 3:
+            self.weapon = 0
+        else:
+            self.weapon += 1
 
-    def shoot(self):
+    def shoot(self, weapon):
         if self.timer <= 0:
-            shot = Shot(self.position.x, self.position.y)
+            shot = Shot(self.position.x, self.position.y, weapon.range, weapon.damage)
             forward = pygame.Vector2(0, 1).rotate(self.rotation)
-            shot.velocity = forward * PLAYER_SHOOT_SPEED
-            self.timer = PLAYER_SHOOT_COOLDOWN
+            shot.velocity = forward * weapon.power
+            self.timer = weapon.rate
 
 class Shot(CircleShape):
-    def __init__(self, x, y):
-        super().__init__(x, y, SHOT_RADIUS)
+    def __init__(self, x, y, radius, damage):
+        super().__init__(x, y, radius)
+        self.damage = damage
 
     def draw(self, screen):
-        pygame.draw.circle(screen, "black", self.position, SHOT_RADIUS)
+        pygame.draw.circle(screen, "white", self.position, self.radius)
 
     def update(self, dt):
         self.position += self.velocity * dt

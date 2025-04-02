@@ -37,6 +37,7 @@ def main():
 
     player_score = 0
     player_lives = 3
+    time = 0
 
     while True:
         for event in pygame.event.get():
@@ -44,9 +45,12 @@ def main():
                 return
             
         background = pygame.image.load("background.jpg")
-        screen.blit(background, (0,0))
+        screen.blit(background, (0, 0))
         player_score_surface = regular_font.render(f"Score: {str(player_score)}", False, "white")
         screen.blit(player_score_surface, (0,0))
+        time_surface = regular_font.render(f"{str(time)}", False, "white")
+        time_size = regular_font.size(f"{str(time)}")
+        screen.blit(time_surface, (SCREEN_WIDTH / 2 - time_size[0], 0))
         player_lives_surface = regular_font.render(f"Lives: {str(player_lives)}", False, "white")
         player_lives_size = regular_font.size(f"Lives: {str(player_lives)}")
         screen.blit(player_lives_surface, (SCREEN_WIDTH - player_lives_size[0], 0))
@@ -68,14 +72,16 @@ def main():
             for shot in shots:
                 if shot.check_collision(asteroid):
                     shot.kill()
-                    asteroid.split()
+                    is_split = asteroid.check_health(shot)
+                    if is_split:
+                        player_score += 1
 
         for object in drawable:
             object.check_collide_edge()
 
         pygame.display.flip()
 
-        player_score = pygame.time.get_ticks() // 1000
+        time = pygame.time.get_ticks() // 1000
         time_passed = clock.tick(FPS)
         dt = time_passed / 1000
 
