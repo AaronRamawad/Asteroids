@@ -24,12 +24,7 @@ class CircleShape(pygame.sprite.Sprite):
         return distance <= combined_radius
     
     def check_collide_edge(self):
-        y_position = self.position.y
-        x_position = self.position.x
-        print(type(self.velocity.magnitude()))
-        y_direction = self.velocity.y
-        x_direction = self.velocity.x
-        print(y_position, x_position, y_direction, x_direction)
-        if self.position.y <= 0 - (self.radius / 2) and self.velocity.magnitude() >= 0:
-            self.position.y = self.position.y + SCREEN_HEIGHT
+
+        if self.position.y <= 0 - (self.radius / 2) and self.velocity.y <= 0:
+            self.position.y = self.position.y + SCREEN_HEIGHT + self.radius
         

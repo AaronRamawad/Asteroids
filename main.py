@@ -70,12 +70,7 @@ def main():
                     asteroid.split()
 
         for object in drawable:
-            pass
-            #check touches top
-            #object.check_collide_edge()
-            #check touches bottom
-            #check touces left
-            #check touches right
+            object.check_collide_edge()
 
         pygame.display.flip()
 
