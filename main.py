@@ -43,7 +43,8 @@ def main():
             if event.type == pygame.QUIT:
                 return
             
-        pygame.Surface.fill(screen, (125, 0, 255))
+        background = pygame.image.load("background.jpg")
+        screen.blit(background, (0,0))
         player_score_surface = regular_font.render(f"Score: {str(player_score)}", False, "white")
         screen.blit(player_score_surface, (0,0))
         player_lives_surface = regular_font.render(f"Lives: {str(player_lives)}", False, "white")
