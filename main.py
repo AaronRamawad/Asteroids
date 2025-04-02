@@ -69,6 +69,14 @@ def main():
                     shot.kill()
                     asteroid.split()
 
+        for object in drawable:
+            pass
+            #check touches top
+            #object.check_collide_edge()
+            #check touches bottom
+            #check touces left
+            #check touches right
+
         pygame.display.flip()
 
         player_score = pygame.time.get_ticks() // 1000
