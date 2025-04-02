@@ -1,7 +1,7 @@
 import pygame
 from constants import *
 from player import Player, Shot
-from asteroid import Asteroid
+from asteroid import Asteroid, Particle
 from asteroidfield import AsteroidField
 
 def kill_all(group):
@@ -17,11 +17,12 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
     pygame.font.init()
-    my_font = pygame.font.SysFont("Comic Sans MS", 30)
+    regular_font = pygame.font.SysFont("Comic Sans MS", 30)
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    particles = pygame.sprite.Group()
     shots = pygame.sprite.Group()
            
     Player.containers = (updatable, drawable)
@@ -29,6 +30,7 @@ def main():
     Shot.containers = (shots, updatable, drawable)
 
     Asteroid.containers = (asteroids, updatable, drawable)
+    Particle.containers = (particles, drawable, updatable)
 
     AsteroidField.containers = (updatable)
     asteroid_field = AsteroidField()
@@ -42,10 +44,10 @@ def main():
                 return
             
         pygame.Surface.fill(screen, (125, 0, 255))
-        player_score_surface = my_font.render(f"Score: {str(player_score)}", False, "white")
+        player_score_surface = regular_font.render(f"Score: {str(player_score)}", False, "white")
         screen.blit(player_score_surface, (0,0))
-        player_lives_surface = my_font.render(f"Lives: {str(player_lives)}", False, "white")
-        player_lives_size = my_font.size(f"Lives: {str(player_lives)}")
+        player_lives_surface = regular_font.render(f"Lives: {str(player_lives)}", False, "white")
+        player_lives_size = regular_font.size(f"Lives: {str(player_lives)}")
         screen.blit(player_lives_surface, (SCREEN_WIDTH - player_lives_size[0], 0))
         for object in drawable:
             object.draw(screen)
@@ -59,6 +61,7 @@ def main():
                 if player_lives == 0:
                     print("Game Over!")
                     exit()
+
 
         for asteroid in asteroids:
             for shot in shots:
